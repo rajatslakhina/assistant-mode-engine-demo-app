@@ -1,0 +1,15 @@
+{
+  "originHash" : "a1dde83a9bc68f12249b2f59722155f6f0d082375b69b03533e2d457356229cc",
+  "pins" : [
+    {
+      "identity" : "assistant-mode-engine-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rajatslakhina/assistant-mode-engine-kit.git",
+      "state" : {
+        "revision" : "c70e1a1df54db054eeacf4d90b92cfba1d825fd4",
+        "version" : "1.0.8"
+      }
+    }
+  ],
+  "version" : 3
+}
