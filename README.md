@@ -66,7 +66,13 @@ After a scripted scenario finishes, the app stays interactive. You can switch mo
 
 ## Verification
 
-(written after CI reports — see below)
+What has actually been run, and where:
+
+- **CI** ([Actions](https://github.com/rajatslakhina/assistant-mode-engine-demo-app/actions/workflows/ci.yml)), two jobs on every push, each resolving `AssistantModes` from GitHub at exactly the version in `Package.resolved` (`-onlyUsePackageVersionsFromResolvedFile`) and building the app for `generic/platform=iOS Simulator`:
+  - on `macos-15` (Xcode 16.4), where the SDK has no Foundation Models, so the `-systemModel` path is compiled out;
+  - on `macos-26` (Xcode 26.6), where it compiles the `-systemModel` path, including `SystemLanguageModel.contextSize`.
+- **On a Simulator**: built against `AssistantModes` 1.0.8 resolved from GitHub, installed on a freshly created iPhone 17 Pro simulator (iOS 27.2) on a Mac with Apple Intelligence, and launched in all five scenarios (`iphone`, `appletv`, `stale`, `eval -systemModel`, `iphone -systemModel`). The app was still running after each launch, and the five screenshots in [`Demo/Screenshots/`](Demo/Screenshots) are from that run. The `-systemModel` runs used Apple's on-device model; the house eval passed on both profiles.
+- **Not run**: a physical iPhone, Apple TV hardware, and a real Claude backend (the escalation backend is simulated).
 
 ## License
 
