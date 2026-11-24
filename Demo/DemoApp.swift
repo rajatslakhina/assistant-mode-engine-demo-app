@@ -141,7 +141,8 @@ enum DemoConfig {
 
     #if canImport(FoundationModels)
     /// Apple's reported context window. `contextSize` is in the iOS 26.4 SDK (back-deployed to 26.0);
-    /// with an older SDK (Swift < 6.3), or while the model reports 0, the documented 4,096 is used.
+    /// with an older SDK (Swift < 6.3, i.e. before Xcode 26.4), or while the model reports 0 (iOS 27,
+    /// model still downloading), the documented 4,096 is used.
     @available(iOS 26.0, *)
     static func systemContextTokens() -> Int {
         #if compiler(>=6.3)

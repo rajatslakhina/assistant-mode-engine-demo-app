@@ -50,12 +50,12 @@ The app owns the configuration: the `ModeGraph` (three modes, their budgets, whi
 - **Apple TV is a profile running on an iPhone Simulator**, not tvOS hardware.
 - **The stale scenario is timing-dependent on purpose:** the mode switch lands 0.3 s into a 1.5 s scripted capture answer.
 - **Apple's model varies.** With `-systemModel`, answers and the stability probe's agreement differ between runs. The screenshots show one run.
-- **A freshly created Simulator may not have the model yet.** While Apple's model is still downloading, `contextSize` reports 0 and the model is unavailable; the demo then plans against 4,096 and the router reports the model as not ready, escalating or refusing each turn. The screenshots were taken once the model was ready.
+- **A freshly created Simulator may not have the model yet.** On iOS 27, while Apple's model is still downloading, `contextSize` can report 0 and the model is unavailable (seen on a freshly created iOS 27.2 Simulator); the demo then plans against 4,096 and the router reports the model as not ready, escalating or refusing each turn. The screenshots were taken once the model was ready.
 - **Latencies in the turn log are Simulator latencies** on the host Mac, not iPhone measurements.
 
 ## How to run it
 
-Requirements: Xcode 16 or later to build and run the scripted scenarios. `-systemModel` additionally needs an Xcode 26+ SDK, iOS 26 or later, and Apple Intelligence available to the Simulator or device.
+Requirements: Xcode 16 or later to build and run the scripted scenarios. `-systemModel` additionally needs an Xcode 26+ SDK (reading the real window with `contextSize` needs Xcode 26.4+; older Xcode 26 SDKs plan against 4,096), iOS 26 or later, and Apple Intelligence available to the Simulator or device.
 
 1. `git clone https://github.com/rajatslakhina/assistant-mode-engine-demo-app.git`
 2. Open `Demo.xcodeproj` in Xcode. Xcode resolves `AssistantModes` from GitHub at the version pinned in `Package.resolved`.
@@ -68,7 +68,7 @@ After a scripted scenario finishes, the app stays interactive. You can switch mo
 
 What has actually been run, and where:
 
-- **CI** ([Actions](https://github.com/rajatslakhina/assistant-mode-engine-demo-app/actions/workflows/ci.yml)), two jobs on every push, each resolving `AssistantModes` from GitHub at exactly the version in `Package.resolved` (`-onlyUsePackageVersionsFromResolvedFile`) and building the app for `generic/platform=iOS Simulator`:
+- **CI** ([Actions](https://github.com/rajatslakhina/assistant-mode-engine-demo-app/actions/workflows/ci.yml)), two jobs on every push to `main`, every `v*` tag and every pull request, each resolving `AssistantModes` from GitHub at exactly the version in `Package.resolved` (`-onlyUsePackageVersionsFromResolvedFile`) and building the app for `generic/platform=iOS Simulator`:
   - on `macos-15` (Xcode 16.4), where the SDK has no Foundation Models, so the `-systemModel` path is compiled out;
   - on `macos-26` (Xcode 26.6), where it compiles the `-systemModel` path, including `SystemLanguageModel.contextSize`.
 - **On a Simulator**: built against `AssistantModes` 1.0.8 resolved from GitHub, installed on a freshly created iPhone 17 Pro simulator (iOS 27.2) on a Mac with Apple Intelligence, and launched in all five scenarios (`iphone`, `appletv`, `stale`, `eval -systemModel`, `iphone -systemModel`). The app was still running after each launch, and the five screenshots in [`Demo/Screenshots/`](Demo/Screenshots) are from that run. The `-systemModel` runs used Apple's on-device model; the house eval passed on both profiles.
